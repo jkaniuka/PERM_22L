@@ -5,7 +5,7 @@ nfft = 512;        % liczba próbek do FFT
 
 % x - wektor próbek audio
 % fs - częstotliwość próbkowania
-[x, fs] = audioread('dtmf.wav');
+[x, fs] = audioread('testwav.wav');
 [s, f, t] = spectrogram(x, win_len, win_overlap, nfft, fs);
 A = abs(s) / nfft;
 
@@ -61,7 +61,7 @@ TF1 = islocalmax(filtered_freq1,'FlatSelection','first'); % wykrywanie początku
 x_axis_scale  = 1:1:length(t);
 plot(x_axis_scale,filtered_freq1,x_axis_scale(TF1),filtered_freq1(TF1),'r*')
 hold on;
-filtered_freq2 = medfilt1(freq2,10);
+filtered_freq2 = medfilt1(freq2,6);
 TF2 = islocalmax(filtered_freq2,'FlatSelection','first');
 plot(x_axis_scale,filtered_freq2,x_axis_scale(TF2),filtered_freq2(TF2),'r*')
 yline(1209,'--r')
@@ -93,13 +93,88 @@ for i=1:length(TF2)
     end
 end
 
-max_freq1 
-max_freq2 
+
+lower_freq = [nnz(TF1),1];
+higher_freq = [nnz(TF1),1];
+
+for i=1:nnz(TF1)
+    if max_freq1(i) < 1025
+        lower_freq(i) = max_freq1(i);
+    end
+    if max_freq1(i) > 1025
+        higher_freq(i) = max_freq1(i);
+    end
+    if max_freq2(i) < 1025
+        lower_freq(i) = max_freq2(i);
+    end
+    if max_freq2(i) > 1025
+        higher_freq(i) = max_freq2(i);
+    end
+end
+% 
+% max_freq1
+% max_freq2
+% lower_freq
+% higher_freq
+
+[rownum,colnum]=size(lower_freq);
+
+low_ref_freq = [697, 770, 852, 941];
+high_ref_freq = [1209, 1336, 1477];
+
+out= ""
 
 
+for i=1:colnum
+    [val_low,idx_low]=min(abs(low_ref_freq-lower_freq(i)));
+     closest_low=low_ref_freq(idx_low);
+     [val_high,idx_high]=min(abs(high_ref_freq-higher_freq(i)));
+     closest_high=high_ref_freq(idx_high);
+     
+     
 
+    if closest_low == 697
+        if closest_high == 1209
+            out = append(out,'1 ');
+        elseif closest_high == 1336
+            out = append(out,'2 ');
+        elseif closest_high == 1477
+            out = append(out,'3 ');
+        end
+    end
+    
+    if closest_low == 770
+        if closest_high == 1209
+            out = append(out,'4 ');
+        elseif closest_high == 1336
+            out = append(out,'5 ');
+        elseif closest_high == 1477
+            out = append(out,'6 ');
+        end
+    end
+    
+    if closest_low == 852
+        if closest_high == 1209
+            out = append(out,'7 ');
+        elseif closest_high == 1336
+            out = append(out,'8 ');
+        elseif closest_high == 1477
+            out = append(out,'9 ');
+        end
+    end
+    
+    if closest_low == 941
+        if closest_high == 1209
+            out = append(out,'* ');
+        elseif closest_high == 1336
+            out = append(out,'0 ');
+        else closest_high == 1477
+            out = append(out,'# ');
+        end
+    end
+end
 
-
+ out
 
 
 % możliwe etykiety danych

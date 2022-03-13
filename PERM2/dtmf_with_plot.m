@@ -1,13 +1,14 @@
-function out = dtmf(x, fs)
 % Do testowania programu wykorzystałem poniższy generator
 % https://www.audiocheck.net/audiocheck_dtmf.php
 
+clear;
 win_len = 512;     % wielkość okna do analizy
 win_overlap = 256; % nakładanie ramek
 nfft = 512;        % liczba próbek do FFT
 
 % x - wektor próbek audio
 % fs - częstotliwość próbkowania
+[x, fs] = audioread('audiocheck.net_dtmf_4_#_#_5_8_4___0_1.wav');
 [s, f, t] = spectrogram(x, win_len, win_overlap, nfft, fs);
 A = abs(s) / nfft;
 
@@ -167,5 +168,5 @@ for i=1:colnum
     end
 end
 
+out
 
-end
