@@ -18,7 +18,7 @@ freq2 = zeros(length(t),1);
 for i=1:length(t)
     % szukam częstotliwości, dla której amplituda jest największa
     % szukam dwóch wartości, bo tony są złożeniem dwóch sinusoid
-    [val,idx] = maxk(A(:,i),2);
+    [~,idx] = maxk(A(:,i),2);
     freq1(i) = f(idx(1));
     freq2(i) = f(idx(2));
 end
@@ -108,7 +108,7 @@ for i=1:nnz(TF1)
     end
 end
 
-[rownum,colnum]=size(lower_freq);
+[~,colnum]=size(lower_freq);
 
 % Częstotliwości referencyjne
 low_ref_freq = [697, 770, 852, 941];
@@ -120,9 +120,9 @@ out = "";
 % Dla każdej pary częstotliwości składowych odnajduję najbliższą parę
 % wartości referencyjnych i na tej podstawie przypisuję kolejny znak
 for i=1:colnum
-    [val_low,idx_low]=min(abs(low_ref_freq-lower_freq(i)));
+    [~,idx_low]=min(abs(low_ref_freq-lower_freq(i)));
      closest_low=low_ref_freq(idx_low);
-     [val_high,idx_high]=min(abs(high_ref_freq-higher_freq(i)));
+     [~,idx_high]=min(abs(high_ref_freq-higher_freq(i)));
      closest_high=high_ref_freq(idx_high);
      
     
