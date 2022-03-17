@@ -10,7 +10,7 @@ br = zeros(1, N);
 %imds = imageDatastore('.', 'FileExtension', '.jpg');
 
 % alternatywnie można załadować bezpośrednio plik wideo
-v = VideoReader('C:\Users\kanja\Desktop\test5.mp4');
+v = VideoReader('C:\Users\Użytkownik WEiTI\Desktop\PERM lab3\test5.mp4');
 
 
 % wczytanie pierwszych N obrazów i analiza jasności
@@ -31,21 +31,32 @@ plot(br, 'LineWidth', 1.5);
 xlim([0 N])
 xlabel('sample')
 ylabel('brightness')
+title('Raw signal')
 
-% autokorelaja
-auto_kor=xcorr(br);
-auto_kor=auto_kor(length(auto_kor)/2+1:length(auto_kor));
+
+f3 = ones(1,3) / 3;
+c3_1 = conv(br, f3, 'same');
 figure;
-plot(auto_kor);
-maks=0;
-auto_value=0;
-for k=2:1:length(auto_kor)-1
-    if(auto_kor(k-1)<auto_kor(k) && auto_kor(k)<auto_kor(k+1))
-        if(auto_kor(k)>auto_value)
-             maks=k;
-            auto_value=auto_kor(k);
-        end
-    end
-end
-maks
-tetno_auto=Fs/maks*60
+plot(c3_1);
+xlabel('sample')
+ylabel('brightness')
+title('After MA filtering')
+
+
+[r1, lags] = xcorr(c3_1);
+r1 = r1(lags >= 0);
+lags = lags(lags>=0);
+figure;
+plot(lags, r1);
+title('Autocorrelation')
+
+[pks, loc] = findpeaks(r1);
+
+fs = 30;
+% przesunięcie w sekundach
+lag_s = loc(1) * 1/fs;
+% częstotliwość bazowa
+freq = 1/lag_s;
+BPM = freq * 60
+
+
