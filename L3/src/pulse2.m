@@ -10,7 +10,7 @@ br = zeros(1, N);
 %imds = imageDatastore('.', 'FileExtension', '.jpg');
 
 % alternatywnie można załadować bezpośrednio plik wideo
-v = VideoReader('C:\Users\Użytkownik WEiTI\Desktop\PERM lab3\test5.mp4');
+v = VideoReader('C:\Users\kanja\Desktop\Studia\SEM 6\PERM\lab_perm\L3\src\test5.mp4');
 
 
 % wczytanie pierwszych N obrazów i analiza jasności
@@ -37,7 +37,7 @@ title('Raw signal')
 f3 = ones(1,3) / 3;
 c3_1 = conv(br, f3, 'same');
 figure;
-plot(c3_1);
+plot(c3_1, 'LineWidth', 1.5);
 xlabel('sample')
 ylabel('brightness')
 title('After MA filtering')
@@ -47,7 +47,7 @@ title('After MA filtering')
 r1 = r1(lags >= 0);
 lags = lags(lags>=0);
 figure;
-plot(lags, r1);
+plot(lags, r1, 'LineWidth', 1.5);
 title('Autocorrelation')
 
 [pks, loc] = findpeaks(r1);
