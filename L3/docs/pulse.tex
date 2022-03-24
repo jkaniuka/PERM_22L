@@ -1,0 +1,38 @@
+\chapter{Optyczny system pomiaru têtna}
+
+
+\section{Treœæ zadania}
+
+Jednym ze sposobów pomiaru têtna jest czujnik optyczny badaj¹cy zmianê natê¿enia œwiat³a przechodz¹cego przez tkanki w momencie przep³ywu krwi (w rytmie zgodnym z biciem serca). Zadanie polega na zarejestrowaniu a nastêpnie przeanalizowaniu tego typu nagrania w celu wyznaczenia têtna. Jako czujnik w tym æwiczeniu wykorzystana zostanie kamera w telefonie komórkowym.
+\\
+\\
+Proszê wyznaczyæ wartoœæ têtna (mierzon¹ w uderzeniach na minutê - \textit{BPM}) na zarejestrowanym nagraniu. Proszê okreœliæ, z jak¹ rozdzielczoœci¹ mo¿liwe jest wyznaczenie têtna oraz ewentualne metody na jej poprawê.
+
+\section{Rozwi¹zanie}
+Zacz¹³em od nagrania krótkiego wideo opisanego w poleceniu. W aparacie wykorzysta³em tryb VGA 640x480 (4:3) oraz w³¹czy³em diodê doœwietlaj¹c¹. Pierwsze trzy próby nagrania video nie zakoñczy³y siê sukcesem. Prawdopodobnie nierównomiernie dociska³em palec lub lekko go przesuwa³em. W czwartej próbie otrzyma³em ju¿ przebieg podobny do tego z materia³ów laboratoryjnych. Jednak przez pierwsze 1,5 sekundy widoczny by³ gwa³towny wzrost jasnoœci obrazu - dopiero potem przebieg mia³ oczekiwany charakter oscylacyjny. Prawdopodobnie zbyt póŸno zacz¹³em dociskaæ palec, wiêc skróci³em po prostu nagranie o pocz¹tkowe 1,5 sekundy. 
+\\
+\\
+Sygna³ reprezentuj¹cy jasnoœæ obrazu w zale¿noœci od numeru próbki podda³em trasformacie Fouriera. Wykorzystuj¹c otrzymane widmo amplitudowe wyznaczy³em dominuj¹c¹ czêstotliwoœæ (\ref{noise_code}).
+\begin{lstlisting}[label={noise_code},style=custommatlab, caption={Wyznaczenie wartoœci têtna (BPM) }]
+% A - widmo amplitudowe
+idx = find(A == maxk(A,1)); % odczytujê najwiêksz¹ amplitudê w widmie
+freq = f(idx); % znajdujê dominuj¹c¹ czêstotliwoœæ
+BPM = freq * 60; % skalujê wynik pomiaru do BPM
+\end{lstlisting}
+
+\begin{figure}[H]
+\centering
+\input{./plots/pulse_signal.tex}
+\caption{Zarejestrowane têtno}
+\end{figure}
+
+Wyznaczone têtno wynosi \textbf{\num{84.7059} $\approx$ 85 BPM}. Dla porównania wykona³em pomiar têtna z wykorzystaniem opaski treningowej (wykorzystywana jest w niej ta sama metoda pomiaru) i uzyska³em wartoœæ zbli¿on¹ do wyliczonej powy¿ej.
+
+\section{Analiza rozdzielczoœci pomiaru}
+Wyznaczenie têtna jest mo¿liwe z rozdzielczoœci¹ wyra¿on¹ wzorem
+\begin{center}
+$\displaystyle\frac{\mbox{sampling frequency}}{\mbox{number of samples}}$
+\end{center}
+ 
+W celu poprawy rozdzielczoœci mo¿na zwiêkszyæ liczbê próbek poprzez wykonanie d³u¿szego nagrania. Wzroœnie wtedy wartoœæ mianownika powy¿szego u³amka, co spowoduje, ¿e bêdzie mo¿na wyznaczyæ têtno z wiêksz¹ dok³adnoœci¹.
+

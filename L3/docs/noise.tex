@@ -1,0 +1,105 @@
+\chapter{Sygna³y zaszumione}
+
+
+\section{Treœæ zadania}
+
+Do sygna³u wygenerowanego bêd¹cego mieszanin¹ trzech sygna³ów sinusoidalnych nale¿y dodaæ losowy szum, wygenerowany np. przy u¿yciu funkcji \texttt{randn}. Tak zaszumiony sygna³ proszê przeanalizowaæ w taki sam sposób jak sygna³ oryginalny. Z widma amplitudowego proszê wybraæ trzy najwiêksze wartoœci (\texttt{maxk}) i odtworzyæ przy ich pomocy sygna³ oryginalny (czêstotliwoœæ i fazê odczytaæ z odpowiednich danych).
+\\
+\\
+Przedstawiæ oba sygna³y, zaszumiony i odzyskany, na jednym wykresie. Proszê porównaæ te¿ wartoœci odzyskane z zaszumionego sygna³u z wartoœciami oryginalnymi u¿ytymi przy generowaniu sygna³ów.
+
+\section{Rozwi¹zanie}
+
+\begin{lstlisting}[label={noise_code},style=custommatlab, caption={Dodanie szumu gaussowskiego}]
+x = x + randn(size(t));
+\end{lstlisting}
+
+Dla sygna³u zaszumionego wyliczono transformatê Fouriera (funkcja \texttt{fft}). Na podstawie uzyskanych wykresów zale¿noœci amplitudy oraz fazy od czêstotliwoœci spróbowano odtworzyæ sygna³ oryginalny.
+
+
+\begin{lstlisting}[label={noise_code},style=custommatlab, caption={Odzyskiwanie parametrów sygna³u}]
+% Wektory na odzyskiwane parametry sygna³ów
+amplitudes = maxk(A,3); % odczytanie amplitud
+frequences = zeros(1,N);
+phases = zeros(1,N);
+
+% Odczytanie czêstotliwoœci
+for i = 1:N
+    idx = find(A == amplitudes(i));
+    frequences(i) = f(idx);
+end
+
+% Odczytanie faz sygna³ów
+for i = 1:N
+    idx = find(f == frequences(i));
+    phases(i) = F(idx);
+end
+
+% Wykreœlenie sygna³u odzyskanego
+x_recovered = zeros(size(t));
+for i = 1:N
+  x_recovered = x_recovered + ...
+        amplitudes(i) * cos(2 * pi * frequences(i) * t + phases(i));
+end
+\end{lstlisting}
+
+\begin{figure}[H]
+\centering
+\input{./plots/noisy_signal.tex}
+\caption{Przebiegi sygna³ów zaszumionego i odzyskanego}
+\end{figure}
+
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{||c| c |c ||} 
+ \hline
+  & oryginalne & odzyskane \\ [0.5ex] 
+ \hline\hline
+ amplituda & 1 & \num{1,0204} \\
+ \hline
+czêstotliwoœæ [Hz] & 15 & \num{15} \\
+ \hline
+ przesuniêcie fazowe [rad] & 0 & \num{0,0266}\\ [1ex] 
+ \hline
+\end{tabular}
+\caption{Pierwszy sygna³ sk³adowy}
+\end{center}
+\end{table}
+
+
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{||c| c |c ||} 
+ \hline
+  & oryginalne & odzyskane \\ [0.5ex] 
+ \hline\hline
+ amplituda & \num{0,4} & \num{0,4305} \\
+ \hline
+czêstotliwoœæ [Hz] & 27 & 27 \\
+ \hline
+ przesuniêcie fazowe [rad] & \num{-1,0472} & \num{-1.1671} \\ [1ex] 
+ \hline
+\end{tabular}
+\caption{Drugi sygna³ sk³adowy}
+\end{center}
+\end{table}
+
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{||c| c |c ||} 
+ \hline
+  & oryginalne & odzyskane \\ [0.5ex] 
+ \hline\hline
+ amplituda & \num{0,8} & \num{0,8609} \\
+ \hline
+czêstotliwoœæ [Hz] & \num{83} & \num{83} \\
+ \hline
+ przesuniêcie fazowe [rad] & \num{0,4488} & \num{0.4581} \\ [1ex] 
+ \hline
+\end{tabular}
+\caption{Trzeci sygna³ sk³adowy}
+\end{center}
+\end{table}
+
+Wartoœci odzyskane z zaszumionego sygna³u w niewielkim stopniu ró¿ni¹ siê od wartoœci oryginalnych, co umo¿liwia doœæ dok³adne odtworzenie sygna³u oryginalnego.
+

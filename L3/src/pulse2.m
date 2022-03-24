@@ -42,11 +42,12 @@ xlabel('sample')
 ylabel('brightness')
 title('After MA filtering')
 
-
 [r1, lags] = xcorr(c3_1);
 r1 = r1(lags >= 0);
 lags = lags(lags>=0);
 figure;
+plot(30./lags, r1, 'LineWidth', 1.5);
+hold on;
 plot(lags, r1, 'LineWidth', 1.5);
 title('Autocorrelation')
 
@@ -56,7 +57,7 @@ fs = 30;
 % przesunięcie w sekundach
 lag_s = loc(1) * 1/fs;
 % częstotliwość bazowa
-freq = 1/lag_s;
+freq = 1/lag_s
 BPM = freq * 60
 
 
