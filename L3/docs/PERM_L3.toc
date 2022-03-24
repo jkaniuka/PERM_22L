@@ -1,6 +1,0 @@
-\contentsline {chapter}{\numberline {1\relax .\enspace }Optyczny system pomiaru t\k etna - wersja druga}{2}{}%
-\contentsline {section}{\numberline {1.1\relax .\enspace }Tre\'s\'c zadania}{2}{}%
-\contentsline {section}{\numberline {1.2\relax .\enspace }Rozwi\k azanie}{2}{}%
-\contentsline {subsection}{\numberline {1.2.1\relax .\enspace }Opis wykorzystanego filtru}{2}{}%
-\contentsline {subsection}{\numberline {1.2.2\relax .\enspace }Wyznaczenie t\k etno}{4}{}%
-\contentsline {subsection}{\numberline {1.2.3\relax .\enspace }Analiza rozdzielczo\'sci pomiaru}{4}{}%

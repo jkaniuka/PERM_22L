@@ -54,12 +54,6 @@ plot(lags, r1, 'LineWidth', 1.5);
 title('Autocorrelation')
 grid on;
 
-inv_ar = 1./lags;
-
-figure;
-plot(1./lags, r1,'-ok', 'LineWidth', 1.5);
-hold on;
-
 
 [pks, loc] = findpeaks(r1);
 
@@ -69,5 +63,4 @@ lag_s = loc(1) * 1/fs;
 % częstotliwość bazowa
 freq = 1/lag_s
 BPM = freq * 60
-
 

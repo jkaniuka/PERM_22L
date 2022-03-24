@@ -14,27 +14,25 @@ Wykorzysta³em plik MP4 nagrany podczas laboratorium L1. Nagranie wykonano w form
 Sygna³ reprezentuj¹cy jasnoœæ obrazu w zale¿noœci od numeru próbki podda³em filtracji. U¿y³em filtru œredniej krocz¹cej ( \textit{ang. moving average}) z oknem o d³ugoœci $N=3$. Implementacja programowa filtracji opiera siê na wykonaniu splotu sygna³u reprezentuj¹cego jasnoœæ obrazu z j¹drem filtru w postaci \( [\frac{1}{3}, \frac{1}{3}, \frac{1}{3}] \). Do splatania sygna³ów wykorzysta³em funkcjê \texttt{conv} pakietu \texttt{MATLAB}. Poni¿sze wykresy przedstawiaj¹ analizowany sygna³ przed (wykres \ref{raw} ) i po (wykres \ref{filtered}) filtracji.
 \\
 \\
-Na wykresie \ref{filtered} wyraŸnie widaæ skutki u¿ycia filtru œredniej krocz¹cej. Uda³o siê wyraŸnie st³umiæ szumy wystêpuj¹ce w \textit{"dolinach"} pierwotnego (surowego) sygna³u. Nie uda³o siê uzyskaæ pe³nego wyg³adzenie. Je¿eli chcemy lepiej wyg³adziæ sygna³ oraz st³umiæ szybkie jego zmiany, nale¿a³oby wyd³u¿yæ j¹dro filtru.
+Na wykresie \ref{filtered} wyraŸnie widaæ skutki u¿ycia filtru œredniej krocz¹cej. Uda³o siê st³umiæ szumy wystêpuj¹ce w \textit{"dolinach"} pierwotnego (surowego) sygna³u. Nie uda³o siê uzyskaæ pe³nego wyg³adzenia. Je¿eli chcemy lepiej wyg³adziæ sygna³ oraz st³umiæ szybkie jego zmiany, nale¿a³oby wyd³u¿yæ j¹dro filtru.
 
 \begin{figure}[H]
 \centering
-\input{./plots/raw.tex}
+ \scalebox{1}{\input{./plots/raw.tex}}
 \caption{Surowy sygna³}
 \label{raw}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\input{./plots/filtered.tex}
+ \scalebox{1}{\input{./plots/filtered.tex}}
 \caption{Sygna³ po filtracji}
 \label{filtered}
 \end{figure}
 
-\subsection{Wyznaczenie têtno}
+\subsection{Wyznaczenie têtna}
 
-Kolejne kroki wyznaczania wartoœci têtna zosta³y zamieszczone w formie komentarzy do kodu Ÿród³owego z listingu \ref{code}.
-Wyznaczone têtno wynosi \textbf{\num{85.7143} $\approx$ 86 BPM}. Otrzymana wartoœæ jest prawie identyczna z wynikiem otrzymanym podczas zastosowania \textit{transformaty Fourier'a} - wtedy têtno wynosi³o $\approx$ 86 BPM.
-Wykorzystuj¹c otrzymane widmo amplitudowe wyznaczy³em dominuj¹c¹ czêstotliwoœæ (\ref{code}).
+Kolejne kroki wyznaczania wartoœci têtna zosta³y zamieszczone w formie komentarzy do kodu Ÿród³owego z listingu \ref{code}. Podstaw¹ do wszelkich obliczeñ by³ wykres autokorelacji (\ref{autocorr}). Wyznaczone têtno wynosi \textbf{\num{85.7143} $\approx$ 86 BPM}. Otrzymana wartoœæ jest prawie identyczna z wynikiem otrzymanym podczas zastosowania \textit{transformaty Fourier'a} - wtedy têtno wynosi³o $\approx$ 85 BPM.
 \begin{lstlisting}[label={code},style=custommatlab, caption={Wyznaczenie wartoœci têtna (BPM) }]
 % wyznaczenie autokorelacji przefiltrowanego sygna³u
 [r1, lags] = xcorr(c3_1);
@@ -50,12 +48,15 @@ freq = 1/lag_s; % czêstotliwoœæ bazowa
 BPM = freq * 60; % têtno w BPM
 \end{lstlisting}
 
+\begin{figure}[H]
+\centering
+ \scalebox{.8}{\input{./plots/autocorr.tex}}
+\caption{Wykres autokorelacji sygna³u}
+\label{autocorr}
+\end{figure}
+
 
 \subsection{Analiza rozdzielczoœci pomiaru}
-Wyznaczenie têtna jest mo¿liwe z rozdzielczoœci¹ wyra¿on¹ wzorem
-\begin{center}
-$\displaystyle\frac{\mbox{sampling frequency}}{\mbox{number of samples}}$
-\end{center}
- 
-W celu poprawy rozdzielczoœci mo¿na zwiêkszyæ liczbê próbek poprzez wykonanie d³u¿szego nagrania. Wzroœnie wtedy wartoœæ mianownika powy¿szego u³amka, co spowoduje, ¿e bêdzie mo¿na wyznaczyæ têtno z wiêksz¹ dok³adnoœci¹.
+W tym przypadku trudniej wyznaczyæ rozdzielczoœæ pomiaru, ni¿ jak mia³o to miejsce podczas korzystania z transformaty Fourier'a. Tutaj rozdzielczoœæ pomiaru wyra¿ona w BPM (czyli \textit{de facto} jako czêstotliwoœæ) jest trudna do okreœlenia, poniewa¿ nie ma sta³ej wartoœci (jest zmienna). Zdecydowanie wygodniej jest wyznaczyæ rozdzielczoœæ w jednostce czasu - przy próbkowaniu z szybkoœci¹ 30 FPS rozdzielczoœæ bêdzie równa \( \frac{1}{30 Hz}\) = 0.033 sekundy. W tym przypadku rozdzielczoœæ nie jest ograniczona przez liczbê próbek wykorzystanych do analizy, jak mia³o to miejsce przy korzystaniu z transformaty Fourier'a.
+
 
