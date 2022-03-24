@@ -21,7 +21,11 @@ ymin=-0.4,
 ymax=0.8,
 ylabel style={font=\color{white!15!black}},
 ylabel={brightness},
-axis background/.style={fill=white}
+axis background/.style={fill=white},
+title style={font=\bfseries},
+title={Raw signal},
+xmajorgrids,
+ymajorgrids
 ]
 \addplot [color=mycolor1, line width=1.5pt, forget plot]
   table[row sep=crcr]{%

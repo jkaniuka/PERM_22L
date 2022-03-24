@@ -28,13 +28,13 @@ end
 
 % dla ułatwienia późniejszej analizy od razu można odjąć od sygnału składową stałą
 br = br - mean(br);
-figure;
-plot(br, 'LineWidth', 1.5);
-xlim([0 N])
-xlabel('sample')
-ylabel('brightness')
-title('Raw signal')
-grid on;
+% figure;
+% plot(br, 'LineWidth', 1.5);
+% xlim([0 N])
+% xlabel('sample')
+% ylabel('brightness')
+% title('Raw signal')
+% grid on;
 
 
 f3 = ones(1,3) / 3;
@@ -46,28 +46,24 @@ ylabel('brightness')
 title('After MA filtering')
 grid on;
 
-[r1, lags] = xcorr(c3_1);
-r1 = r1(lags >= 0);
-lags = lags(lags>=0);
-figure;
-plot(lags, r1, 'LineWidth', 1.5);
-title('Autocorrelation')
-grid on;
+matlab2tikz('filtered.tex')
 
-inv_ar = 1./lags;
-
-figure;
-plot(1./lags, r1,'-ok', 'LineWidth', 1.5);
-hold on;
-
-
-[pks, loc] = findpeaks(r1);
-
-fs = 30;
-% przesunięcie w sekundach
-lag_s = loc(1) * 1/fs;
-% częstotliwość bazowa
-freq = 1/lag_s
-BPM = freq * 60
+% [r1, lags] = xcorr(c3_1);
+% r1 = r1(lags >= 0);
+% lags = lags(lags>=0);
+% figure;
+% plot(30./lags, r1, 'LineWidth', 1.5);
+% hold on;
+% plot(lags, r1, 'LineWidth', 1.5);
+% title('Autocorrelation')
+% 
+% [pks, loc] = findpeaks(r1);
+% 
+% fs = 30;
+% % przesunięcie w sekundach
+% lag_s = loc(1) * 1/fs;
+% % częstotliwość bazowa
+% freq = 1/lag_s
+% BPM = freq * 60
 
 

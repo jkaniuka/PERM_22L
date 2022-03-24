@@ -1,34 +1,57 @@
-\chapter{Optyczny system pomiaru têtna}
+\chapter{Optyczny system pomiaru têtna - wersja druga}
 
 
 \section{Treœæ zadania}
 
-Jednym ze sposobów pomiaru têtna jest czujnik optyczny badaj¹cy zmianê natê¿enia œwiat³a przechodz¹cego przez tkanki w momencie przep³ywu krwi (w rytmie zgodnym z biciem serca). Zadanie polega na zarejestrowaniu a nastêpnie przeanalizowaniu tego typu nagrania w celu wyznaczenia têtna. Jako czujnik w tym æwiczeniu wykorzystana zostanie kamera w telefonie komórkowym.
-\\
-\\
-Proszê wyznaczyæ wartoœæ têtna (mierzon¹ w uderzeniach na minutê - \textit{BPM}) na zarejestrowanym nagraniu. Proszê okreœliæ, z jak¹ rozdzielczoœci¹ mo¿liwe jest wyznaczenie têtna oraz ewentualne metody na jej poprawê.
+Proszê powtórzyæ zadanie nr 1 (pomiar têtna), tym razem wykorzystuj¹c metodê \textbf{autokorelacji}. Podobnie jak poprzednio, proszê wyznaczyæ têtno i okreœliæ mo¿liw¹ do uzyskania rozdzielczoœæ pomiaru (wraz z ocen¹, od czego ta rozdzielczoœæ zale¿y). Sygna³ wejœciowy proszê poddaæ obróbce wybranymi filtrami wyg³adzaj¹cymi. 
 
 \section{Rozwi¹zanie}
-Zacz¹³em od nagrania krótkiego wideo opisanego w poleceniu. W aparacie wykorzysta³em tryb VGA 640x480 (4:3) oraz w³¹czy³em diodê doœwietlaj¹c¹. Pierwsze trzy próby nagrania video nie zakoñczy³y siê sukcesem. Prawdopodobnie nierównomiernie dociska³em palec lub lekko go przesuwa³em. W czwartej próbie otrzyma³em ju¿ przebieg podobny do tego z materia³ów laboratoryjnych. Jednak przez pierwsze 1,5 sekundy widoczny by³ gwa³towny wzrost jasnoœci obrazu - dopiero potem przebieg mia³ oczekiwany charakter oscylacyjny. Prawdopodobnie zbyt póŸno zacz¹³em dociskaæ palec, wiêc skróci³em po prostu nagranie o pocz¹tkowe 1,5 sekundy. 
+
+Wykorzysta³em plik MP4 nagrany podczas laboratorium L1. Nagranie wykonano w formacie VGA 640x480 (4:3) z w³¹czon¹ diod¹ doœwietlaj¹c¹. D³ugoœæ nagrania wynosi oko³o 8,5 sekundy.
+
+
+\subsection{Opis wykorzystanego filtru}
+Sygna³ reprezentuj¹cy jasnoœæ obrazu w zale¿noœci od numeru próbki podda³em filtracji. U¿y³em filtru œredniej krocz¹cej ( \textit{ang. moving average}) z oknem o d³ugoœci $N=3$. Implementacja programowa filtracji opiera siê na wykonaniu splotu sygna³u reprezentuj¹cego jasnoœæ obrazu z j¹drem filtru w postaci \( [\frac{1}{3}, \frac{1}{3}, \frac{1}{3}] \). Do splatania sygna³ów wykorzysta³em funkcjê \texttt{conv} pakietu \texttt{MATLAB}. Poni¿sze wykresy przedstawiaj¹ analizowany sygna³ przed (wykres \ref{raw} ) i po (wykres \ref{filtered}) filtracji.
 \\
 \\
-Sygna³ reprezentuj¹cy jasnoœæ obrazu w zale¿noœci od numeru próbki podda³em trasformacie Fouriera. Wykorzystuj¹c otrzymane widmo amplitudowe wyznaczy³em dominuj¹c¹ czêstotliwoœæ (\ref{noise_code}).
-\begin{lstlisting}[label={noise_code},style=custommatlab, caption={Wyznaczenie wartoœci têtna (BPM) }]
-% A - widmo amplitudowe
-idx = find(A == maxk(A,1)); % odczytujê najwiêksz¹ amplitudê w widmie
-freq = f(idx); % znajdujê dominuj¹c¹ czêstotliwoœæ
-BPM = freq * 60; % skalujê wynik pomiaru do BPM
-\end{lstlisting}
+Na wykresie \ref{filtered} wyraŸnie widaæ skutki u¿ycia filtru œredniej krocz¹cej. Uda³o siê wyraŸnie st³umiæ szumy wystêpuj¹ce w \textit{"dolinach"} pierwotnego (surowego) sygna³u. Nie uda³o siê uzyskaæ pe³nego wyg³adzenie. Je¿eli chcemy lepiej wyg³adziæ sygna³ oraz st³umiæ szybkie jego zmiany, nale¿a³oby wyd³u¿yæ j¹dro filtru.
 
 \begin{figure}[H]
 \centering
-\input{./plots/pulse_signal.tex}
-\caption{Zarejestrowane têtno}
+\input{./plots/raw.tex}
+\caption{Surowy sygna³}
+\label{raw}
 \end{figure}
 
-Wyznaczone têtno wynosi \textbf{\num{84.7059} $\approx$ 85 BPM}. Dla porównania wykona³em pomiar têtna z wykorzystaniem opaski treningowej (wykorzystywana jest w niej ta sama metoda pomiaru) i uzyska³em wartoœæ zbli¿on¹ do wyliczonej powy¿ej.
+\begin{figure}[H]
+\centering
+\input{./plots/filtered.tex}
+\caption{Sygna³ po filtracji}
+\label{filtered}
+\end{figure}
 
-\section{Analiza rozdzielczoœci pomiaru}
+\subsection{Wyznaczenie têtno}
+
+Kolejne kroki wyznaczania wartoœci têtna zosta³y zamieszczone w formie komentarzy do kodu Ÿród³owego z listingu \ref{code}.
+Wyznaczone têtno wynosi \textbf{\num{85.7143} $\approx$ 86 BPM}. Otrzymana wartoœæ jest prawie identyczna z wynikiem otrzymanym podczas zastosowania \textit{transformaty Fourier'a} - wtedy têtno wynosi³o $\approx$ 86 BPM.
+Wykorzystuj¹c otrzymane widmo amplitudowe wyznaczy³em dominuj¹c¹ czêstotliwoœæ (\ref{code}).
+\begin{lstlisting}[label={code},style=custommatlab, caption={Wyznaczenie wartoœci têtna (BPM) }]
+% wyznaczenie autokorelacji przefiltrowanego sygna³u
+[r1, lags] = xcorr(c3_1);
+% interesuj¹ nas tylko dodatnie przesuniêcia
+r1 = r1(lags >= 0);
+lags = lags(lags>=0);
+% znajdujê drugi grzbiet sygna³u (maksimum lokalne)
+[pks, loc] = findpeaks(r1);
+
+fs = 30; % czêstotliwoœæ próbkowania
+lag_s = loc(1) * 1/fs; % przesuniêcie w sekundach
+freq = 1/lag_s; % czêstotliwoœæ bazowa
+BPM = freq * 60; % têtno w BPM
+\end{lstlisting}
+
+
+\subsection{Analiza rozdzielczoœci pomiaru}
 Wyznaczenie têtna jest mo¿liwe z rozdzielczoœci¹ wyra¿on¹ wzorem
 \begin{center}
 $\displaystyle\frac{\mbox{sampling frequency}}{\mbox{number of samples}}$
