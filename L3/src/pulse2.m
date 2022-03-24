@@ -10,7 +10,9 @@ br = zeros(1, N);
 %imds = imageDatastore('.', 'FileExtension', '.jpg');
 
 % alternatywnie można załadować bezpośrednio plik wideo
-v = VideoReader('C:\Users\kanja\Desktop\Studia\SEM 6\PERM\lab_perm\L3\src\test5.mp4');
+% v = VideoReader('C:\Users\kanja\Desktop\Studia\SEM 6\PERM\lab_perm\L3\src\test5.mp4');
+v = VideoReader('C:\Users\kanja\Desktop\output.mp4');
+
 
 
 % wczytanie pierwszych N obrazów i analiza jasności
