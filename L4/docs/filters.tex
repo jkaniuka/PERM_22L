@@ -1,0 +1,93 @@
+\chapter{Filtracja sygna³u audio}
+
+
+\section{Treœæ zadania}
+
+Na do³¹czonym do zadania nagraniu, oprócz rozmowy dwóch osób, pojawiaj¹ siê dwa rodzaje zak³óceñ. Pierwszym jest \textbf{sta³y przydŸwiêk spowodowany sprzê¿eniem sieciowym}. Drugie zak³ócenie pojawia siê pod koniec nagrania - jest to \textbf{sygna³ budzika}. Proszê przefiltrowaæ nagranie w taki sposób, aby oba te zak³ócenia usun¹æ, pozostawiaj¹c przy tym mo¿liwie najmniejsze zniekszta³cenia w³aœciwej mowy.
+\\
+\\
+W ramach zadania proszê przygotowaæ zestaw filtrów typu \textit{windowed-sinc}, które bêd¹ wycina³y odpowiednie pasma czêstotliwoœci. Analizê pasm do wyciêcia proszê wykonaæ "naocznie" na podstawie analizy spektrogramu nagrania. Filtry powinny byæ wyznaczane zgodnie z metodami przestawionymi na wyk³adzie.
+W ramach rozwi¹zania proszê przygotowaæ co najmniej dwa ró¿ne filtry: filtr dolnoprzepustowy oraz pasmowoblokuj¹cy.
+\\
+\\
+Filtracji sygna³u proszê dokonaæ przez wykorzystanie standardowej funkcji splotu (\verb|conv|). Proszê pamiêtaæ o tym, ¿e parametry filtrów wyznaczane s¹ w relacji do czêstotliwoœci próbkowania, a wiêc czêstotliwoœci wyra¿one w \textit{Hz} nale¿y odpowiednio przeliczaæ na u³amek [0 - 0.5].
+
+
+
+
+\section{Rozwi¹zanie}
+
+\subsection{Analiza spektrogramu surowego sygna³u}
+Rozwi¹zywanie zadania zacz¹³em od analizy spektrogramu otrzymanego sygna³u audio.
+\subsection{Zidentyfikowanie zakresów czêstotliwoœci do wyciêcia}
+\subsection{Charakterystyka amplitudowa przygotowanych filtrów}
+Przygotowa³em cztery filtry:
+
+\begin{itemize}
+  \item filtr doloprzepustowy (\ref{LP})
+  \item filtr górnoprzepustowy (\ref{HP})
+  \item filtr pasmowoprzepustowy (\ref{BP})
+  \item filtr pasmowozaporowy (\ref{BS})
+\end{itemize}
+(wzmocnienie w dziedzinie czêstotliwoœci)
+
+\begin{figure}[H]
+\centering
+ \scalebox{0.6}{\input{./plots/filtered.tex}}
+\caption{Sygna³ po filtracji}
+\label{filtered}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+ \scalebox{0.6}{\input{./plots/filtered.tex}}
+\caption{Sygna³ po filtracji}
+\label{filtered}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+ \scalebox{0.6}{\input{./plots/filtered.tex}}
+\caption{Sygna³ po filtracji}
+\label{filtered}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+ \scalebox{0.6}{\input{./plots/filtered.tex}}
+\caption{Sygna³ po filtracji}
+\label{filtered}
+\end{figure}
+
+
+
+\subsection{Analiza spektrogramu przefiltrowanego sygna³u}
+\subsection{Ocena jakoœci otrzymanego nagrania}
+(tzn. nauszne stwierdzenie, jak du¿e zniekszta³cenia sygna³u u¿ytecznego spowodowa³a filtracja)
+
+
+
+
+
+\subsection{Kody Ÿród³owe}
+(wyznaczanie filtrów oraz ich aplikacja do sygna³u)
+
+\begin{lstlisting}[label={LP},style=custommatlab, caption={LOW PASS}]
+\end{lstlisting}
+
+\begin{lstlisting}[label={HP},style=custommatlab, caption={HIGH PASS}]
+\end{lstlisting}
+
+\begin{lstlisting}[label={BP},style=custommatlab, caption={BAND PASS}]
+\end{lstlisting}
+
+
+\begin{lstlisting}[label={BS},style=custommatlab, caption={BAND STOP}]
+\end{lstlisting}
+
+
+
+
+
+
+
