@@ -1,3 +1,6 @@
+DŸwiêczna = ma³a energia
+BezdŸwiêczna = du¿a energia
+
 P - bezdŸwiêczna
 E - dŸwiêczna
 R - dŸwiêczna 
