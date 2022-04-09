@@ -1,31 +1,18 @@
+function [y,kernel] = lowpass(sig,fc,BW)
 
-% Parametry:
-% sig - sygnal wejsciowy
-% fc - czestotliwosc graniczna
-% BW - szerokosc pasma przejsciowego (wyrazona jako ulamek fs)
-% 
-% Wartosci zwracane:
-% y - sygnal po przefiltrowaniu
-% f - odp.imp. filtru
-
-function [y,f] = lowpass(sig,fc,BW)
-
-M=floor(4/BW); % ustalenie liczby probek filtru
-if mod(M,2)==1 % jesli M nieparzyste, to zamien na najlblizsza parzysta
+M=floor(4/BW); % długość jądra
+if mod(M,2)==1 % M musi być parzyste
     M=M+1;
-end    
+end
 
-n=0:M;
+i=0:M;
+sinc_func=2*pi*fc*sinc(2*fc*(i-M/2)); % funkcja sinc
+window=0.42-0.5*cos(2*pi*i/M)+0.08*cos(4*pi*i/M); % okno Blackmana
+kernel=(sinc_func.*window);
 
-sinc_sig=2*pi*fc*sinc(2*fc*(n-M/2)); % funkcja sinc
+% zapewnienie wzmocnienia=1 dla zerowej częstotliwości
+kernel=kernel/sum(kernel); 
 
-w=0.42-0.5*cos(2*pi*n/(M))+0.08*cos(4*pi*n/(M)); % okno Blackmana
-
-f=(sinc_sig.*w);
-
-K=sum(f); % K dobieramy tak, by suma probek filtru = 1
-f=f/K; % filtr LP
-
-y=conv(sig,f); % splot sygnalu wejsciowego i odp. imp. filtru
+y=conv(sig,kernel); % splot sygnału z jądrem filtru
 
 end

@@ -1,45 +1,30 @@
-%           FILTR BP
-% Parametry:
-% sig - sygnal wejsciowy
-% fd - dolna czestotliwosc graniczna
-% fu - gorna czestotliwosc graniczna
-% BW - szerokosc pasma przejsciowego (wyrazona jako ulamek fs)
-% 
-% Wartosci zwracane:
-% y - sygnal po przefiltrowaniu
-% f - odp.imp. filtru
+function [y,kernel] = bandpass(sig,fL,fH,BW)
 
-function [y,f] = bandstop(sig,fd,fu,BW)
-
-M=floor(4/BW); % ustalenie liczby probek filtru
-if mod(M,2)==1 % jesli M nieparzyste, to zamien na najlblizsza parzysta
+M=floor(4/BW); % długość jądra
+if mod(M,2)==1 % M musi być parzyste
     M=M+1;
-end    
+end
 
-n=0:M;
-sinc_sig_d=2*pi*fd*sinc(2*fd*(n-M/2)); % funkcja sinc dla filtru LP1
+i=0:M;
+sinc_func_LOW=2*pi*fL*sinc(2*fL*(i-M/2)); % lowpass 1
+sinc_func_HIGH=2*pi*fH*sinc(2*fH*(i-M/2)); % lowpass 2
 
-sinc_sig_u=2*pi*fu*sinc(2*fu*(n-M/2)); % funkcja sinc dla filtru LP2
+w=0.42-0.5*cos(2*pi*i/M)+0.08*cos(4*pi*i/M); % okno Blackmana
 
-w=0.42-0.5*cos(2*pi*n/(M))+0.08*cos(4*pi*n/(M)); % okno Blackmana
+fL=sinc_func_LOW.*w;
+fH=sinc_func_HIGH.*w;
 
-fd=sinc_sig_d.*w;
-fu=sinc_sig_u.*w;
+% zapewnienie wzmocnienia=1 dla f=0
+fL=fL/sum(fL); % filtr LP1
+fH=fH/sum(fH); % filtr LP2
 
-Kd=sum(fd); % K dobieramy tak, by suma probek filtru = 1
-Ku=sum(fu); % K dobieramy tak, by suma probek filtru = 1
+% filtr lowpass2 poddajemy inwersji spektralnej
+fH=-fH;
+fH(fH==min(fH))=fH(fH==min(fH))+1;
 
-fd=fd/Kd; % filtr LP1
-fu=fu/Ku; % filtr LP2
+% złożenie jąder filtrów LP i HP w jedno
+kernel=(fL+fH);
 
-% inwersja spektralna LP2->HP
-fu=-fu;
-fu(fu==min(fu))=fu(fu==min(fu))+1;
-
-% polaczenie filtrow (LP1 + HP) -> BR
-f=(fd+fu);
-
-
-y=conv(sig,f); % splot sygnalu wejsciowego i odp. imp. filtru
+y=conv(sig,kernel); % splot sygnału i jądra filtru
 
 end

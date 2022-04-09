@@ -8,7 +8,5 @@ function filtstat(f)
     y=fft(f_ex);
     f_base = linspace(0, fs/2, nfft/2+1);
     amp = abs(y(1:nfft/2+1));
-    phase = angle(y(1:nfft/2+1));
-    
-    twoplots(f_base, amp, phase);
+    plot(f_base, amp);
 end
