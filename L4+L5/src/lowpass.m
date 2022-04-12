@@ -1,4 +1,4 @@
-function [y,kernel] = lowpass(sig,fc,BW)
+function [y,kernel] = lowpass(sig, fc, BW)
 
 M=floor(4/BW); % długość jądra
 if mod(M,2)==1 % M musi być parzyste

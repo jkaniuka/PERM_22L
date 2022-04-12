@@ -1,4 +1,4 @@
-function [y,kernel] = highpass(sig,fc,BW)
+function [y,kernel] = highpass(sig, fc, BW)
 
 M=floor(4/BW); % długość jądra
 if mod(M,2)==1 % M musi być parzyste

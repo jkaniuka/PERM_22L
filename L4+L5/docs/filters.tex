@@ -18,51 +18,87 @@ Filtracji sygna³u proszê dokonaæ przez wykorzystanie standardowej funkcji splotu
 \section{Rozwi¹zanie}
 
 \subsection{Analiza spektrogramu surowego sygna³u}
-Rozwi¹zywanie zadania zacz¹³em od analizy spektrogramu otrzymanego sygna³u audio.
+Rozwi¹zywanie zadania zacz¹³em od analizy spektrogramu otrzymanego sygna³u audio. Wykorzysta³em w tym celu funkcjê \texttt{spectrogram} pakietu \verb|MATLAB|.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[scale=0.7]{plots/spectrogram}
+		\caption{Spektrogram sygna³u wejœciowego}
+\end{figure}
+
+
 \subsection{Zidentyfikowanie zakresów czêstotliwoœci do wyciêcia}
+Nale¿y oczyœciæ sygna³ z dwóch rodzajów zak³óceñ. S¹ to odpowiednio:
+\begin{itemize}
+  \item \textbf{przydŸwiêk spowodowany sprzê¿eniem sieciowym} - jest on s³yszalny przez ca³y czas trwania nagrania. Z teoretycznego punktu widzenia jest to zwyczajnie s³yszalne na³o¿enie na sygna³ audio czêstotliwoœci sieci zasilaj¹cej AC 50Hz (sk³adowa podstawowa) oraz jej harmonicznych (100Hz, 150Hz, itd.). Na spektrogramie jest on widoczny jako pasmo o ¿ó³tym kolorze w zakresie niskich czêstotliwoœci.
+\\
+\\
+	Do usuniêcia przydŸwiêku planujê zastosowaæ \textbf{filtr górnoprzepustowy} o czêstotliwoœci granicznej 200Hz i szerokoœci pasma przejœciowego 100Hz (pasmo przejœciowe nie powinno byæ ekstremalnie w¹skie, poniewa¿ wtedy nagranie po obróbce bêdzie brzmia³o \textit{nienaturalnie}.
+\\
+\\
+  \item \textbf{sygna³ budzika} - jest s³yszalny jako okresowe pikanie, niezbyt przyjemne dla ucha (szczególnie o poranku). Sygna³ pojawia siê oko³o ósmej sekundy nagrania. Na spektrogramie widaæ wyraŸnie, ¿e sygna³ budzika jest z³o¿ony z trzech g³ównych sk³adowych czêstotliwoœciowych o czêstotliwoœciach: ~2kHz, ~4kHz i oko³o 6kHz. 
+\\
+\\
+	Do usuniêcia sygna³u budzika planujê zastosowaæ \textbf{3 filtry pasmowozaporowe} blokuj¹ce czêstotliwoœci z zakresu o œrodku w czêstotliwoœciach odpowiednio 2,4 i 6kHz i o szerokoœci pasma przejœciowego 150Hz. Szerokoœæ pasm zaporowych wybiorê na drodze eksperymentu podczas testowania filtrów.
+\end{itemize}
+
+
+
+
+
 \subsection{Charakterystyka amplitudowa przygotowanych filtrów}
-Przygotowa³em cztery filtry:
+Przygotowa³em w sumie cztery filtry typu \textit{windowed-sinc}:
 
 \begin{itemize}
-  \item filtr doloprzepustowy (\ref{LP})
-  \item filtr górnoprzepustowy (\ref{HP})
-  \item filtr pasmowoprzepustowy (\ref{BP})
-  \item filtr pasmowozaporowy (\ref{BS})
+  \item filtr doloprzepustowy $\rightarrow$ \textit{lowpass(sig, fc, BW)}
+  \item filtr górnoprzepustowy $\rightarrow$ \textit{highpass(sig, fc, BW)}
+  \item filtr pasmowoprzepustowy $\rightarrow$ \textit{bandpass(sig, fL, fH, BW)}
+  \item filtr pasmowozaporowy $\rightarrow$ \textit{bandstop(sig, fL, fH, BW)}
 \end{itemize}
-(wzmocnienie w dziedzinie czêstotliwoœci)
+
+
+Poni¿ej zamieœci³em charakterystyki amplitudowe przygotowanych filtrów (wzmocnienie w dziedzinie czêstotliwoœci). Wykresy wygenerowa³em u¿ywaj¹c zmodyfikowanej funkcji \texttt{filtstat()} z laboratorium trzeciego.
+
 
 \begin{figure}[H]
 \centering
  \scalebox{0.6}{\input{./plots/filtered.tex}}
-\caption{Sygna³ po filtracji}
-\label{filtered}
+\caption{Filtr lowpass, fc=}
 \end{figure}
 
 \begin{figure}[H]
 \centering
  \scalebox{0.6}{\input{./plots/filtered.tex}}
-\caption{Sygna³ po filtracji}
-\label{filtered}
+\caption{Filtr highpass, fc=}
 \end{figure}
 
 \begin{figure}[H]
 \centering
  \scalebox{0.6}{\input{./plots/filtered.tex}}
-\caption{Sygna³ po filtracji}
-\label{filtered}
+\caption{Filtr bandpass, fL=  , fH= }
 \end{figure}
 
 \begin{figure}[H]
 \centering
  \scalebox{0.6}{\input{./plots/filtered.tex}}
-\caption{Sygna³ po filtracji}
-\label{filtered}
+\caption{Filtr bandstop, fL=  , fH= }
 \end{figure}
 
 
 
 \subsection{Analiza spektrogramu przefiltrowanego sygna³u}
+Po eksperymentalnym procesie doboru szerokoœci pasm zaporowych w filtrach pasmowozaporowych uda³o siê osi¹gn¹æ znaczn¹ poprawê jakoœci nagrania. W celu sprawdzenia, czy filtry \textit{bandstop} faktycznie blokuj¹ zadane pasmo czêstotliwoœci, wygenerowa³em spektrogram nagrania audio po edycji. Rezultat widoczny jest na poni¿szym wykresie. 
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[scale=0.7]{plots/spectrogram_after}
+		\caption{Spektrogram sygna³u wejœciowego}
+\end{figure}
+
 \subsection{Ocena jakoœci otrzymanego nagrania}
+Wa¿niejsza od spektrogramu jest nauszna ocena jakoœci nagrania. Uwa¿am, ¿e uda³o siê osi¹gn¹æ wysoce zadowalaj¹c¹ jakoœæ nagrania audio. Filtr górnoprzepustowy pozwoli³ na wyeliminowanie przydŸwiêku do poziomu lekkiego szumienia w tle, które absolutnie nie zag³usza osób rozmawiaj¹cych na nagraniu. Filtry pasmowozaporowe wyeliminowa³y sk³adowe czêstotliwoœciowe sygna³u budzika. Nie s³ychaæ ju¿ g³oœnego, piskliwego i rozpraszaj¹cego \textit{pikania}. Zamiast tego w tle s³ychaæ jedynie ciche, okresowe stukanie, które jest pozosta³oœci¹ po filtracji sygna³u. Jest ono jednak na tyle wyt³umione, ¿e bez trudu mo¿na zrozumieæ treœæ rozmowy. Próbowa³em na ró¿ne sposoby wyeliminowaæ ten stukot poprzez np. zwiêkszenie pasm zaporowych filtrów \textit{bandstop}. Niestety bardziej zniekszta³ca³o to dŸwiêki rozmowy ani¿eli sam stukot.
+\\
+\\
+	W tym miejscu nale¿y jednak odpowiedzieæ sobie na pytanie, czy wspomniany stukot nale¿y wyeliminowaæ ca³kowicie. Osobiœcie uwa¿am, ¿e nie jest to konieczne. Je¿eli analityk wywiadu otrzyma³by takie nagranie to filtrowa³by je do momentu, a¿ jego treœæ bêdzie zrozumia³a, a nie idealna i ca³kowicie pozbawiona zak³óceñ.
 (tzn. nauszne stwierdzenie, jak du¿e zniekszta³cenia sygna³u u¿ytecznego spowodowa³a filtracja)
 
 
@@ -72,17 +108,157 @@ Przygotowa³em cztery filtry:
 \subsection{Kody Ÿród³owe}
 (wyznaczanie filtrów oraz ich aplikacja do sygna³u)
 
-\begin{lstlisting}[label={LP},style=custommatlab, caption={LOW PASS}]
+\begin{lstlisting}[label={LP},style=custommatlab, caption={Filtr lowpass}]
+function [y,kernel] = lowpass(sig, fc, BW)
+
+M=floor(4/BW); % d³ugoœæ j¹dra
+if mod(M,2)==1 % M musi byæ parzyste
+    M=M+1;
+end
+
+i=0:M;
+sinc_func=2*pi*fc*sinc(2*fc*(i-M/2)); % funkcja sinc
+window=0.42-0.5*cos(2*pi*i/M)+0.08*cos(4*pi*i/M); % okno Blackmana
+kernel=(sinc_func.*window);
+
+% zapewnienie wzmocnienia=1 dla zerowej czêstotliwoœci
+kernel=kernel/sum(kernel); 
+
+y=conv(sig,kernel); % splot sygna³u z j¹drem filtru
+
+end
 \end{lstlisting}
 
-\begin{lstlisting}[label={HP},style=custommatlab, caption={HIGH PASS}]
+\begin{lstlisting}[label={HP},style=custommatlab, caption={Filtr highpass}]
+function [y,kernel] = highpass(sig, fc, BW)
+
+M=floor(4/BW); % d³ugoœæ j¹dra
+if mod(M,2)==1 % M musi byæ parzyste
+    M=M+1;
+end
+
+i=0:M;
+sinc_func=2*pi*fc*sinc(2*fc*(i-M/2)); % funkcja sinc
+window=0.42-0.5*cos(2*pi*i/M)+0.08*cos(4*pi*i/M); % okno Blackmana
+kernel=(sinc_func.*window);
+
+% zapewnienie wzmocnienia=1 dla zerowej czêstotliwoœci
+kernel=kernel/sum(kernel); 
+
+% inwersja spektralna 
+kernel=-kernel; %zmiana znaku wszystkich próbek
+kernel(kernel==min(kernel))=kernel(kernel==min(kernel))+1;
+
+y=conv(sig,kernel); % splot sygna³u z j¹drem filtru
+
+end
 \end{lstlisting}
 
-\begin{lstlisting}[label={BP},style=custommatlab, caption={BAND PASS}]
+\begin{lstlisting}[label={BP},style=custommatlab, caption={Filtr bandpass}]
+function [y,kernel] = bandpass(sig, fL, fH, BW)
+
+M=floor(4/BW); % d³ugoœæ j¹dra
+if mod(M,2)==1 % M musi byæ parzyste
+    M=M+1;
+end
+
+i=0:M;
+sinc_func_LOW=2*pi*fL*sinc(2*fL*(i-M/2)); % lowpass 1
+sinc_func_HIGH=2*pi*fH*sinc(2*fH*(i-M/2)); % lowpass 2
+
+window=0.42-0.5*cos(2*pi*i/M)+0.08*cos(4*pi*i/M); % okno Blackmana
+
+fL=sinc_func_LOW.*window;
+fH=sinc_func_HIGH.*window;
+
+% zapewnienie wzmocnienia=1 dla f=0
+fL=fL/sum(fL); % filtr LP1
+fH=fH/sum(fH); % filtr LP2
+
+% filtr lowpass2 poddajemy inwersji spektralnej
+fH=-fH;
+fH(fH==min(fH))=fH(fH==min(fH))+1;
+
+% z³o¿enie j¹der filtrów LP i HP w jedno
+kernel=(fL+fH);
+
+% ponowna inwersja w celu otrzymania filtra bandpass z filtra bandstop
+kernel=-kernel;
+kernel(kernel==min(kernel))=kernel(kernel==min(kernel))+1;
+
+y=conv(sig,kernel); % splot sygna³u i j¹dra filtru
+
+end
 \end{lstlisting}
 
 
-\begin{lstlisting}[label={BS},style=custommatlab, caption={BAND STOP}]
+\begin{lstlisting}[label={BS},style=custommatlab, caption={Filtr bandstop}]
+function [y,kernel] = bandstop(sig, fL, fH, BW)
+
+M=floor(4/BW); % d³ugoœæ j¹dra
+if mod(M,2)==1 % M musi byæ parzyste
+    M=M+1;
+end
+
+i=0:M;
+sinc_func_LOW=2*pi*fL*sinc(2*fL*(i-M/2)); % lowpass 1
+sinc_func_HIGH=2*pi*fH*sinc(2*fH*(i-M/2)); % lowpass 2
+
+window=0.42-0.5*cos(2*pi*i/M)+0.08*cos(4*pi*i/M); % okno Blackmana
+
+fL=sinc_func_LOW.*window;
+fH=sinc_func_HIGH.*window;
+
+% zapewnienie wzmocnienia=1 dla f=0
+fL=fL/sum(fL); % filtr LP1
+fH=fH/sum(fH); % filtr LP2
+
+% filtr lowpass2 poddajemy inwersji spektralnej
+fH=-fH;
+fH(fH==min(fH))=fH(fH==min(fH))+1;
+
+% z³o¿enie j¹der filtrów LP i HP w jedno
+kernel=(fL+fH);
+
+y=conv(sig,kernel); % splot sygna³u i j¹dra filtru
+
+end
+\end{lstlisting}
+
+\begin{lstlisting}[label={BS},style=custommatlab, caption={Aplikacja filtrów do sygna³u}]
+\end{lstlisting}
+
+\begin{lstlisting}[label={BS},style=custommatlab, caption={Spektrogram i ods³uchanie nagrania}]
+[sig, fs] = audioread('noised.wav');
+win_len = 512;
+win_overlap =256;
+nfft = 512;
+
+figure;
+spectrogram(sig(:,1), win_len, win_overlap, nfft, fs, ...
+    'MinThreshold', -100, 'yaxis');
+title("Spektrogram zarejestrowanego sygna³u");
+
+sound(sig,fs);
+\end{lstlisting}
+
+\begin{lstlisting}[label={BS},style=custommatlab, caption={Rysowanie charakterystyki amplitudowej}]
+function filtstat(f)
+    nfft = 1000;
+    fs = 1000;
+    
+    f_ex = zeros(1, nfft);
+    f_ex(1:size(f, 2)) = f;
+    
+    y=fft(f_ex);
+    f_base = linspace(0, fs/2, nfft/2+1);
+    prescaler = (fs/2 - 0)/(nfft/2+1 - 1);
+    amp = abs(y(1:nfft/2+1));
+    plot(prescaler*f_base, amp, 'LineWidth',1.5);
+    grid on;
+    xlabel('Hz');
+    ylabel('Wzmocnienie');
+end
 \end{lstlisting}
 
 
