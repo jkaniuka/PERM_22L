@@ -1,5 +1,5 @@
-DŸwiêczna = ma³a energia
-BezdŸwiêczna = du¿a energia
+DŸwiêczna = rzadziej przechodzi przez zero
+BezdŸwiêczna = czêsto przechodzi przez zero
 
 P - bezdŸwiêczna
 E - dŸwiêczna
