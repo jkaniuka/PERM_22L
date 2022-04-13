@@ -8,4 +8,4 @@ spectrogram(sig(:,1), win_len, win_overlap, nfft, fs, ...
     'MinThreshold', -100, 'yaxis');
 title("Spektrogram zarejestrowanego sygnału");
 
-sound(sig,fs);
+%sound(sig,fs);
