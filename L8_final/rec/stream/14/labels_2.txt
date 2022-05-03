@@ -1,0 +1,7 @@
+lewo 2.299
+prawo 3.541
+stop 4.551
+start 5.503
+stop 9.009
+lewo 11.923
+prawo 13.05

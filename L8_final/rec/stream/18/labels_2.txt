@@ -1,0 +1,4 @@
+start 1.02
+stop 2.40
+lewo 3.62
+prawo 4.7

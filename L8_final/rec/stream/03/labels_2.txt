@@ -1,0 +1,7 @@
+start 02.60
+lewo 04.23
+stop 05.66
+prawo 06.78
+stop 08.10
+lewo 10.73
+start 12.30
