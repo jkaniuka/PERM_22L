@@ -1,0 +1,4 @@
+lewo 4.23
+prawo 6.72
+stop 9.12
+start 11.04

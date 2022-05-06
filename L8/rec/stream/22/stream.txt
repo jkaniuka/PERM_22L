@@ -1,0 +1,12 @@
+stream 1:
+prawo 0.694
+lewo 0.597
+start 0.665
+stop 0.619
+
+
+stream 2:
+prawo 1.781
+lewo 1.778
+start 0.322
+stop 0.922

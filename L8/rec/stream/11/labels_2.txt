@@ -1,0 +1,4 @@
+stop 1.7
+start 2.6
+lewo 3.9
+prawo 5.6
